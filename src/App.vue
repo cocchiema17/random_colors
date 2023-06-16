@@ -1,6 +1,6 @@
 <template>
   <div class="header">
-    <img src="./assets/title.png" height="300" width="500">
+    <img src="./assets/title.png"/>
     <!-- font: good dog -->
     <p>
       Prova ad indovinare quale colore gener&agrave; l'applicazione
@@ -191,6 +191,11 @@ export default {
   color: #2c3e50;
 }
 
+img {
+  height: 200px;
+  width: 400px;
+}
+
 label {
   padding-right: 5px;
 }
@@ -207,5 +212,12 @@ label {
   height: 50px;
   width: 300px;
   border-style: outset;
+}
+
+@media screen and (max-width: 400px) {
+  img {
+    height: 200px;
+    width: 300px;
+  }
 }
 </style>
