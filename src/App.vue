@@ -1,59 +1,123 @@
 <template>
   <div class="header">
-    <h1>Colori Random</h1>
+    <img src="./assets/title.png" height="300" width="500">
+    <!-- font: good dog -->
     <p>
       Prova ad indovinare quale colore gener&agrave; l'applicazione
       <strong>randomicamente</strong>.
     </p>
     <h2>Punteggio: {{ score }}</h2>
     <h2>Tentativi: {{ attempts }}</h2>
+    <h2>Probabilit&agrave; di successo: {{ propability }} %</h2>
   </div>
 
   <div class="form">
     <h2>Inserisci il colore:</h2>
     <label for="color">Colore</label>
-    <select name="color" id="color" v-model="color">
+    <select
+      name="color"
+      id="color"
+      class="w-25"
+      v-model="color"
+      @change="onChangeColor"
+      style="margin-right: 5px"
+    >
       <option></option>
       <option value="nero">Nero</option>
       <option value="bianco">Bianco</option>
       <option value="rosso">Rosso</option>
       <option value="verde">Verde</option>
       <option value="blu">Blu</option>
+      <option value="azzurro">Azzurro</option>
+      <option value="giallo">Giallo</option>
+      <option value="grigio">Grigio</option>
     </select>
-    <span v-if="isError">Devi inserire un colore!</span>
-    <button class="btn btn-dark" @click="colorValidation">Invia</button>
+    <button
+      :class="['btn-'] + colorButton"
+      class="btn"
+      @click="colorValidation"
+    >
+      Invia
+    </button>
+    <br />
+    <span v-if="isError" class="text-danger">Devi inserire un colore!</span>
   </div>
 
   <div class="result" v-if="isFinish">
-    <h3 v-if="isRight">Corretto</h3>
-    <h3 v-else>Sbagliato</h3>
-    <p>Il colore che &egrave; stato generato &egrave; {{ randomColor }}</p>
+    <h3 v-if="isRight" class="text-success">Corretto</h3>
+    <h3 v-else class="text-danger">Sbagliato</h3>
+    <p>
+      Il colore che &egrave; stato generato &egrave;
+      <strong>{{ randomColor }} </strong>.
+    </p>
+    <div class="rect" :class="['bg-'] + colorRect"></div>
   </div>
-  <!-- <img alt="Vue logo" src="./assets/logo.png">
-  <HelloWorld msg="Welcome to Your Vue.js App"/> -->
 </template>
 
 <script>
-// import HelloWorld from './components/HelloWorld.vue'
-
 export default {
   name: "App",
-  // components: {
-  //   HelloWorld
-  // }
   data() {
     return {
       color: "",
+      colorButton: "dark",
+      colorRect: "dark",
       isError: false,
-      colors: ["bianco", "nero", "rosso", "verde", "blu"],
+      colors: [
+        "bianco",
+        "nero",
+        "rosso",
+        "verde",
+        "blu",
+        "azzurro",
+        "giallo",
+        "grigio",
+      ],
       randomColor: "",
       isRight: false,
       isFinish: false,
       score: 0,
       attempts: 0,
+      propability: 0,
     };
   },
+  created() {
+    this.getPropability();
+  },
   methods: {
+    getPropability() {
+      this.propability = (1 / this.colors.length) * 100;
+    },
+    onChangeColor() {
+      switch (this.color) {
+        case "bianco":
+          this.colorButton = "light";
+          break;
+        case "nero":
+          this.colorButton = "dark";
+          break;
+        case "rosso":
+          this.colorButton = "danger";
+          break;
+        case "verde":
+          this.colorButton = "success";
+          break;
+        case "blu":
+          this.colorButton = "primary";
+          break;
+        case "azzurro":
+          this.colorButton = "info";
+          break;
+        case "giallo":
+          this.colorButton = "warning";
+          break;
+        case "grigio":
+          this.colorButton = "secondary";
+          break;
+        default:
+          this.colorButton = "dark";
+      }
+    },
     colorValidation() {
       if (this.color == "") this.isError = true;
       else {
@@ -67,6 +131,7 @@ export default {
       let randomNumber = this.getRandomInt(min, max);
       this.randomColor = this.colors[randomNumber];
       this.getResult();
+      this.getColorRect();
     },
     getRandomInt(min, max) {
       min = Math.ceil(min);
@@ -74,14 +139,44 @@ export default {
       return Math.floor(Math.random() * (max - min + 1)) + min;
     },
     getResult() {
+      this.attempts++;
       if (this.color == this.randomColor) {
         this.isRight = true;
         this.score++;
       } else {
         this.isRight = false;
-        this.score--;
       }
       this.isFinish = true;
+    },
+    getColorRect() {
+      switch (this.randomColor) {
+        case "bianco":
+          this.colorRect = "light";
+          break;
+        case "nero":
+          this.colorRect = "dark";
+          break;
+        case "rosso":
+          this.colorRect = "danger";
+          break;
+        case "verde":
+          this.colorRect = "success";
+          break;
+        case "blu":
+          this.colorRect = "primary";
+          break;
+        case "azzurro":
+          this.colorRect = "info";
+          break;
+        case "giallo":
+          this.colorRect = "warning";
+          break;
+        case "grigio":
+          this.colorRect = "secondary";
+          break;
+        default:
+          this.colorRect = "dark";
+      }
     },
   },
 };
@@ -94,6 +189,23 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-  margin-top: 60px;
+}
+
+label {
+  padding-right: 5px;
+}
+
+.result {
+  display: inline-block;
+}
+
+.btn {
+  border: outset !important;
+}
+
+.rect {
+  height: 50px;
+  width: 300px;
+  border-style: outset;
 }
 </style>
