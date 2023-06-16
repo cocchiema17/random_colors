@@ -27,14 +27,27 @@
       <li><a href="https://vue-loader.vuejs.org" target="_blank" rel="noopener">vue-loader</a></li>
       <li><a href="https://github.com/vuejs/awesome-vue" target="_blank" rel="noopener">awesome-vue</a></li>
     </ul>
+    <button @click="getPersonaggi">cliccami</button>
   </div>
 </template>
 
 <script>
+import { collection } from "firebase/firestore/lite";
+import { db } from "../utils/firebase-config";
+
 export default {
   name: 'HelloWorld',
   props: {
     msg: String
+  },
+  methods: {
+    async getPersonaggi() {
+      const personaggiCol = collection(db, 'personaggi');
+      const personaggiSnapShot = await getDocs(personaggiCol);
+      personaggiSnapShot.map(personaggio => {
+        console.log(personaggio.data());
+      });
+    }
   }
 }
 </script>
