@@ -5,6 +5,8 @@
     <p>
       Prova ad indovinare quale colore gener&agrave; l'applicazione
       <strong>randomicamente</strong>.
+      <br>
+      Vinci in caso il tuo punteggio sia almeno 2.
     </p>
     <h2>Punteggio: {{ score }}</h2>
     <h2>Tentativi rimanenti: {{ attempts }}</h2>
