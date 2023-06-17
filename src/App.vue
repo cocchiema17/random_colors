@@ -1,14 +1,13 @@
 <template>
   <div class="header">
-    <img src="./assets/title.png"/>
+    <img src="./assets/title.png" />
     <!-- font: good dog -->
     <p>
       Prova ad indovinare quale colore gener&agrave; l'applicazione
       <strong>randomicamente</strong>.
     </p>
     <h2>Punteggio: {{ score }}</h2>
-    <h2>Tentativi: {{ attempts }}</h2>
-    <h2>Probabilit&agrave; di successo: {{ propability }} %</h2>
+    <h2>Tentativi rimanenti: {{ attempts }}</h2>
   </div>
 
   <div class="form">
@@ -43,7 +42,7 @@
     <span v-if="isError" class="text-danger">Devi inserire un colore!</span>
   </div>
 
-  <div class="result" v-if="isFinish">
+  <div class="result" v-if="isFinishGenerate">
     <h3 v-if="isRight" class="text-success">Corretto</h3>
     <h3 v-else class="text-danger">Sbagliato</h3>
     <p>
@@ -52,11 +51,21 @@
     </p>
     <div class="rect" :class="['bg-'] + colorRect"></div>
   </div>
+  <EndGameModal
+    :showModal="showModal"
+    :score="score"
+    :goal="goal"
+    @restart="resetData"
+    @close="showModal = false"
+  />
 </template>
 
 <script>
+import EndGameModal from "./components/EndGameModal";
+
 export default {
   name: "App",
+  components: { EndGameModal },
   data() {
     return {
       color: "",
@@ -75,19 +84,15 @@ export default {
       ],
       randomColor: "",
       isRight: false,
-      isFinish: false,
+      isFinishGenerate: false,
       score: 0,
-      attempts: 0,
+      attempts: 10,
       propability: 0,
+      goal: 2,
+      showModal: false,
     };
   },
-  created() {
-    this.getPropability();
-  },
   methods: {
-    getPropability() {
-      this.propability = (1 / this.colors.length) * 100;
-    },
     onChangeColor() {
       switch (this.color) {
         case "bianco":
@@ -132,6 +137,7 @@ export default {
       this.randomColor = this.colors[randomNumber];
       this.getResult();
       this.getColorRect();
+      if (this.attempts == 0) this.showModal = true;
     },
     getRandomInt(min, max) {
       min = Math.ceil(min);
@@ -139,14 +145,14 @@ export default {
       return Math.floor(Math.random() * (max - min + 1)) + min;
     },
     getResult() {
-      this.attempts++;
+      this.attempts--;
       if (this.color == this.randomColor) {
         this.isRight = true;
         this.score++;
       } else {
         this.isRight = false;
       }
-      this.isFinish = true;
+      this.isFinishGenerate = true;
     },
     getColorRect() {
       switch (this.randomColor) {
@@ -177,6 +183,18 @@ export default {
         default:
           this.colorRect = "dark";
       }
+    },
+    resetData() {
+      this.color = "";
+      this.colorButton = "dark";
+      this.colorRect = "dark";
+      this.isError = false;
+      this.randomColor = "";
+      this.isRight = false;
+      this.isFinishGenerate = false;
+      this.score = 0;
+      this.attempts = 10;
+      this.showModal = false;
     },
   },
 };

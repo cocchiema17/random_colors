@@ -1,0 +1,65 @@
+<template>
+  <div>
+    <div v-if="showModal" class="modal">
+      <div class="modal-content">
+        <h2>Risultato</h2>
+        <h3 v-if="score >= goal" class="text-success">Hai Vinto!</h3>
+        <h3 v-else class="text-danger">Hai Perso!</h3>
+        <button @click="onRestart">Rigioca</button>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script>
+export default {
+  name: "EndGameModalComp",
+  props: ["showModal", "score", "goal"],
+  methods: {
+    onRestart() {
+      this.$emit("restart");
+    },
+    closeModal() {
+      this.$emit('close');
+    },
+  },
+};
+</script>
+
+<style scoped>
+.modal {
+  display: block;
+  position: fixed;
+  z-index: 1;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+.modal-content {
+  background-color: #fefefe;
+  margin: 10% auto;
+  padding: 20px;
+  border: 1px solid #888;
+  width: 80%;
+  max-width: 600px;
+}
+
+.close {
+  color: #aaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.close:hover,
+.close:focus {
+  color: black;
+  text-decoration: none;
+  cursor: pointer;
+}
+</style>
