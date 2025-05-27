@@ -1,10 +1,5 @@
 # random_colors
 
-## Project setup
-```
-npm install
-```
-
 ## Accedere al seguente indirizzo per provare il gioco:
 ```
 https://random-colors-cocchi.netlify.app/
